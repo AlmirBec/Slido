@@ -1,0 +1,198 @@
+
+
+body {
+  padding: 0px;
+  margin: 0px;
+  background-color: lightblue;
+}
+.pocetna{
+  background-color: lightblue;
+}
+a {
+  text-decoration: none;
+}
+
+.traka{
+  height: 70px;
+  margin-left: 0px;
+}
+.upis{
+  height: 150px;
+  width: 800px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: #2a722a;
+  opacity: 0.9;
+}
+.upis2{
+  height: 150px;
+  width: 800px;
+  border-radius: 50px 50px 50px 50px;
+  background-color: #4d64a1;
+  opacity: 0.9;
+}
+.naslovPub1{
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 18px;
+  position: absolute;
+}
+.naslovPub2{
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input-polje{
+  margin-top: 55px;
+  width: 300px;
+  border-radius: 50px 50px 50px 50px;
+}
+.nez{
+  margin-left: 350px;
+  margin-top: -30px;
+}
+.upoz{
+  color:red;
+  font-weight: bold;
+}
+.urldiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dug{
+  margin-left: 150px;
+  color: black;
+  background-color: aqua;
+  border-radius: 50px 50px 50px 50px;
+}
+#urldugme{
+
+  color: black;
+  background-color: aqua;
+  border-radius: 50px 50px 50px 50px;
+
+}
+.registracija{
+  margin-top: 100px;
+  width: 450px;
+  margin-left: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background-color: #4d64a1;
+
+}
+.dug1{
+  margin-left: 60px;
+  color: black;
+  background-color: aqua;
+  border-radius: 50px 50px 50px 50px;
+}
+.inputReg{
+  margin: 10px;
+  padding: 10px;
+  border-radius: 50px 50px 50px 50px;
+}
+.sir{
+  width: auto;
+}
+.prozor{
+  width: 600px;
+  margin: 100px auto;
+}
+.svePoruke{
+  height: 400px;
+  overflow-y: scroll;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+.prikazInputa{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+#tekstPoruke{
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+#submitDugme{
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.oblikPoruke{
+  margin: 10px;
+  padding: 10px;
+  background-color: lightblue;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.lajk{
+  float: right;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: red;
+}
+.fa{
+  height: 5px;
+}
+
+.horizontalna-traka{
+  display: flex;
+
+}
+
+.adminlo{
+  display: flex;
+  float: right;
+  margin-right: 20px;
+}
+.review{
+  margin-top: -50px;
+  display: flex;
+  flex-direction: column;
+}
+.reviewButtons{
+  margin-top: -50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.reviewButtons button{
+  margin-right: 10px;
+  padding: 10px;
+}
+.desno{
+  float:right;
+}
+
+.prikazkoda{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.prikazkoda > img{
+  width: 500px;
+  height: 500px;
+
+}

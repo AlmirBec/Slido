@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <!-- Latest compiled and minified CSS -->
+  <!-- Latest compiled and minified CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src='/socket.io/socket.io.js'></script>
+</head>
+<body>
+
+  <!--<div style="background-image: url(</%=url%/>);"></div>-->
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+    <a href="/predavac/predavanje/prikazi/<%=kod%>" target="_blank">Prikazi kod</a>
+    </div>
+    <div class="col-3">
+    <form method="post" action="/predavac/posaljikod/<%=kod%>">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Posalji kod</button>
+
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <form>
+              <div class="modal-body">
+                <label for="name">Ukucajte mail za slanje</label>
+                <input type="text" name="mail" placeholder="Ukucajte mail:">
+
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer">
+
+                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" >Posalji</button>
+
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+    <div class="col-3">
+    <form action="/predavac/slanjeizvjestaja/<%=kod%>" method="post">
+      <button class="btn btn-primary">End Lecture</button>
+    </form>
+    </div>
+    <div class="col-3">
+      <form action="/predavac/logout">
+        <button class="btn btn-primary">Log out</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="prozor">
+  <div class="dugmadi">
+    <button id = <%=kod%> onclick="sortirajPoBrojuLajkova(event)" class="btn btn-secondary">By likes: </button>
+    <button id = <%=kod + "ids"%> onclick="sortirajPoId(event)" class="btn btn-secondary">By time: </button>
+    <button id = <%=kod + "odp"%> onclick="odgovorenaPitanja(event)" class="btn btn-secondary">Answered: </button>
+    <button id = <%=kod + "zab"%> onclick="zabranjenaPitanja(event)" class="btn btn-secondary">Prohibited: </button>
+  </div>
+  <div class="prikazPoruka">
+    <div class="svePoruke">
+
+    </div>
+  </div>
+  <div class="prikazInputa">
+    <input type="text" id ="tekstPoruke">
+    <input type="submit" id ="submitDugme" value="Send" onclick="posaljiPoruku()">
+  </div>
+</div>
+<script>
+
+  const socket = io.connect('ws://localhost:3000');
+  const svePor = document.querySelector(".svePoruke");
+  socket.on("poruka_svima", function(d){
+    //console.log(d);
+    //
+    let tekst = d.tekst;
+    let noviDiv = document.createElement('div');
+    let poruka = document.createElement('p');
+    poruka.innerText = tekst;
+    noviDiv.classList.add("oblikPoruke");
+    poruka.classList.add("sadrzaj");
+    noviDiv.appendChild(poruka);
+    let button = document.createElement("button");
+    button.innerHTML = `<i class = "fa fa-thumbs-up"></i>${d.broj_lajkova}`;
+    button.classList.add('lajk');
+    button.id = d.id;
+    button.onclick = function klik(){
+      socket.emit('like', button.id);
+    }
+    let button2 = document.createElement("button");
+    button2.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i>`;
+    button2.classList.add('lajk')
+    button2.id = d.id + "odg";
+    button2.onclick = function odgovor(){
+      socket.emit('odgovoreno', button2.id)
+    }
+
+    let button3 = document.createElement("button");
+    button3.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
+    button3.classList.add('lajk')
+    button3.id = d.id + "iks";
+    button3.onclick = function obrisi(){
+      socket.emit('delete', button3.id)
+    }
+    let button4 = document.createElement("button");
+    button4.innerHTML = `<i class="fa fa-eye-slash" aria-hidden="true"></i>`;
+    button4.classList.add('lajk')
+    button4.id = d.id + "sak";
+    button4.onclick = function sakrij(){
+      socket.emit('hide', button4.id)
+    }
+
+    document.querySelector('.svePoruke').appendChild(button4);
+
+    document.querySelector('.svePoruke').appendChild(button3);
+    document.querySelector('.svePoruke').appendChild(button2);
+    document.querySelector('.svePoruke').appendChild(button);
+
+    document.querySelector('.svePoruke').appendChild(noviDiv);
+    svePor.scrollTop = svePor.scrollHeight - svePor.clientHeight;
+  })
+  socket.on('sve_poruke', function (d) {
+    while(svePor.hasChildNodes()){
+      svePor.removeChild(svePor.firstChild);
+    }
+    for(let i = 0; i < d.length; i++){
+      let tekst = d[i].tekst;
+      let noviDiv = document.createElement('div');
+      noviDiv.classList.add("posebnaPoruka");
+      let poruka = document.createElement('p');
+      poruka.classList.add("tekstPoruke");
+      poruka.innerText = tekst;
+      noviDiv.classList.add("oblikPoruke");
+      poruka.classList.add("sadrzaj");
+      noviDiv.appendChild(poruka);
+      let but = document.createElement("button");
+      but.innerHTML = `<i class = "fa fa-thumbs-up"></i>${d[i].broj_lajkova}`;
+      but.classList.add('lajk');
+      but.id = d[i].id;
+
+      but.onclick = function klik(){
+        socket.emit('like', but.id);
+      }
+      let button2 = document.createElement("button");
+      button2.innerHTML = `<i class="fa fa-check" aria-hidden="true"></i>`;
+      button2.classList.add('lajk')
+      button2.id = d[i].id + "odg";
+      button2.onclick = function odgovor(){
+        socket.emit('odgovoreno', button2.id)
+      }
+
+      let button3 = document.createElement("button");
+      button3.innerHTML = `<i class="fa fa-times" aria-hidden="true"></i>`;
+      button3.classList.add('lajk')
+      button3.id = d[i].id + "iks";
+      button3.onclick = function obrisi(){
+        socket.emit('delete', button3.id)
+      }
+
+      let button4 = document.createElement("button");
+      button4.innerHTML = `<i class="fa fa-eye-slash" aria-hidden="true"></i>`;
+      button4.classList.add('lajk')
+      button4.id = d[i].id + "sak";
+      button4.onclick = function sakrij(){
+        socket.emit('hide', button4.id)
+      }
+
+      document.querySelector('.svePoruke').appendChild(button4);
+
+      document.querySelector('.svePoruke').appendChild(button3);
+
+      //but.onclick = povecajBroj(but.id);
+      document.querySelector('.svePoruke').appendChild(button2);
+      document.querySelector('.svePoruke').appendChild(but);
+      document.querySelector('.svePoruke').appendChild(noviDiv);
+    }
+
+    socket.on('likeCount', (d) => {
+      console.log(d.id);
+      document.getElementById(d.id).innerHTML = `<i class = "fa fa-thumbs-up"></i>${d.bl}`;
+    })
+
+
+    //svePor.scrollTop = svePor.scrollHeight - svePor.clientHeight;
+
+  });
+  function posaljiPoruku(){
+    let tekst = document.getElementById("tekstPoruke").value;
+    socket.emit("moja_poruka", tekst);
+    document.getElementById("tekstPoruke").value = "";
+  }
+
+  function sortirajPoBrojuLajkova(event){
+    let id = event.target.id;
+    socket.emit("po_broju_lajkova", id);
+  }
+
+  function sortirajPoId(event){
+    let id = (event.target.id).slice(0, -3);
+    socket.emit('prvobitni', id);
+  }
+  function odgovorenaPitanja(event){
+    let id = (event.target.id).slice(0, -3);
+    socket.emit('odg_pit', id);
+  }
+  function zabranjenaPitanja(event){
+    let id = (event.target.id).slice(0, -3);
+    socket.emit('zab_pit', id);
+  }
+</script>
+</body>
+</html>

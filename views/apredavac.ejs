@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+  <div class="adminlo">
+    <form action="/admin/logout">
+      <button class="btn btn danger">Log out</button>
+    </form>
+  </div>
+    <div class="row container-fluid mt-3">
+      <div class="col-3 bg-info">
+        <form action="/admin/predavac">
+          <button class="btn btn-dark">Predavac</button>
+        </form>
+      </div>
+      <div class="col-3 bg-info">
+        <form action="/admin/predavanje">
+          <button class="btn btn-dark">Predavanje</button>
+        </form>
+      </div>
+      <div class="col-3 bg-info">
+        <form action="/admin/pitanja">
+          <button class="btn btn-dark">Pitanja</button>
+        </form>
+      </div>
+      <div class="col-3 bg-info">
+        <form action="/admin/vulgarizmi">
+          <button class="btn btn-dark">Vulgarizmi</button>
+        </form>
+      </div>
+
+    </div>
+    <div class="table-responsive">
+    <table class="table table-sm table-hover">
+      <caption class="caption-top mt-4">Lista predavaca</caption>
+      <!-- Button to Open the Modal -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+      Dodaj predavaca
+      </button>
+
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Modal Heading</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <form method="post" action="/admin/predavac/dodaj">
+            <div class="modal-body">
+              <input type="text" name="username" placeholder="Username">
+              <input type="text" name="password" placeholder="Password">
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" >Submit</button>
+
+            </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+      <tr>
+        <th>ID</th>
+        <th>USERNAME</th>
+
+        <th>SIFRA</th>
+        <th>EMAIL</th>
+        <th>IME</th>
+        <th>PREZIME</th>
+        <th>PRISTUP</th>
+        <th>DATUM BANOVANJA</th>
+      </tr>
+      <%for(let i = 0; i < predavaci.length; i++){%>
+      <tr>
+        <td><%=predavaci[i].id%></td>
+        <td><%=predavaci[i].username%></td>
+        <td><%=predavaci[i].sifra%></td>
+        <td><%=predavaci[i].email%></td>
+        <td><%=predavaci[i].ime%></td>
+        <td><%=predavaci[i].prezime%></td>
+        <td><%=predavaci[i].pristup%></td>
+        <%if(predavaci[i].datum_banovanja !== null){%>
+        <td><%=predavaci[i].datum_banovanja.toDateString()%></td>
+        <%} else {%>
+        <td></td>
+        <%}%>
+        <td>
+          <form action="/admin/predavac/ban/<%=predavaci[i].id%>" method="post">
+            <button>BAN</button>
+          </form>
+        </td>
+        <td>
+          <form action="/admin/predavac/unban/<%=predavaci[i].id%>" method="post">
+            <button>REMOVE BAN</button>
+          </form>
+        </td>
+        <td>
+          <form action="/admin/predavac/obrisi/<%=predavaci[i].id%>">
+          <button>DELETE</button>
+          </form>
+        </td>
+
+      </tr>
+
+      <%}%>
+    </table>
+    </div>
+  </body>
+</html>
